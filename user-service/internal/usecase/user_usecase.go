@@ -151,7 +151,11 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 	return user, nil
 }
 
-func (u *userUsecase) ChangePassword(ctx context.Context, requester *model.User, input model.ChangePasswordInput) (*model.User, error) {
+func (u *userUsecase) ChangePasswordByID(ctx context.Context, requester *model.User, id int64, input model.ChangePasswordInput) (*model.User, error) {
+	if !requester.HasAccess(rbac.ResourceUser, rbac.ActionEditAny) {
+		return nil, ErrPermissionDenied
+	}
+
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":       utils.DumpIncomingContext(ctx),
 		"requester": utils.Dump(requester),
@@ -162,7 +166,7 @@ func (u *userUsecase) ChangePassword(ctx context.Context, requester *model.User,
 		return nil, err
 	}
 
-	user, err := u.userRepo.FindByID(ctx, requester.ID)
+	user, err := u.userRepo.FindByID(ctx, id)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
@@ -192,7 +196,7 @@ func (u *userUsecase) ChangePassword(ctx context.Context, requester *model.User,
 		return nil, err
 	}
 
-	err = u.userRepo.UpdatePasswordByID(ctx, requester.ID, cipherPassword)
+	err = u.userRepo.UpdatePasswordByID(ctx, id, cipherPassword)
 	if err != nil {
 		logger.Error(err)
 		return nil, err

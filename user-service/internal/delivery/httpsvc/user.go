@@ -68,6 +68,43 @@ func (s *Service) handleUpdateUser() echo.HandlerFunc {
 	}
 }
 
+func (s *Service) handleChangeUserPassword() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := c.Request().Context()
+		requester := delivery.GetAuthUserFromCtx(ctx)
+		logger := logrus.WithFields(logrus.Fields{
+			"ctx":         utils.DumpIncomingContext(ctx),
+			"requesterID": requester.ID,
+		})
+
+		req := model.ChangePasswordInput{}
+		if err := c.Bind(&req); err != nil {
+			logrus.Error(err)
+			return ErrInvalidArgument
+		}
+
+		userID := utils.StringToInt64(c.Param("userID"))
+		_, err := s.userUsecase.ChangePasswordByID(ctx, requester, userID, req)
+		switch err {
+		case nil:
+			break
+		case usecase.ErrPermissionDenied:
+			return ErrPermissionDenied
+		case usecase.ErrPasswordMismatch:
+			return ErrPasswordMismatch
+		case usecase.ErrNotFound:
+			return ErrNotFound
+		default:
+			logger.Error(err)
+			return ErrInternal
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success updated password",
+		})
+	}
+}
+
 func (s *Service) handleDeleteUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ctx := c.Request().Context()

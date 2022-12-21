@@ -52,7 +52,7 @@ type UserUsecase interface {
 	FindByID(ctx context.Context, requester *User, id int64) (*User, error)
 	FindAll(ctx context.Context, requester *User, criteria UserSearchCriteria) ([]*User, int64, error)
 	Create(ctx context.Context, requester *User, input CreateUserInput) (*User, error)
-	ChangePassword(ctx context.Context, requester *User, input ChangePasswordInput) (*User, error)
+	ChangePasswordByID(ctx context.Context, requester *User, id int64, input ChangePasswordInput) (*User, error)
 	UpdateByID(ctx context.Context, requester *User, id int64, input UpdateUserInput) (*User, error)
 	DeleteByID(ctx context.Context, requester *User, id int64) (*User, error)
 }

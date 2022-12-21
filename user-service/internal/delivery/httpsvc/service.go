@@ -42,6 +42,7 @@ func (s *Service) initRoutes() {
 	userRoute.GET("/", s.handleGetAllUsers(), s.httpMiddleware.MustAuthenticateAccessToken())
 	userRoute.POST("/", s.handleCreateUser(), s.httpMiddleware.MustAuthenticateAccessToken())
 	userRoute.PUT("/:userID/", s.handleUpdateUser(), s.httpMiddleware.MustAuthenticateAccessToken())
+	userRoute.PUT("/:userID/password/", s.handleChangeUserPassword(), s.httpMiddleware.MustAuthenticateAccessToken())
 	userRoute.GET("/:userID/", s.handleGetUserByID(), s.httpMiddleware.MustAuthenticateAccessToken())
 	userRoute.DELETE("/:userID/", s.handleDeleteUser(), s.httpMiddleware.MustAuthenticateAccessToken())
 }
