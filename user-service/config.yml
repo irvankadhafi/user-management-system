@@ -1,0 +1,33 @@
+env: "development"
+log_level: "debug"
+ports:
+  http: "3000"
+postgres:
+  host: "localhost:25432"
+  database: "user-service"
+  username: "usedeall"
+  password: "irvankdhf"
+  sslmode: "disable"
+  max_idle_conns: 2
+  conn_max_lifetime: "1h"
+  ping_interval: "5000ms"
+  retry_attempts: 3
+redis:
+  dial_timeout: 5
+  write_timeout: 2
+  read_timeout: 2
+  max_idle_conn: 20
+  max_active_conn: 50
+  cache_host: "redis://localhost:6379/0"
+  lock_host: "redis://localhost:6379/1"
+  auth_cache_host: "redis://localhost:6379/2"
+  auth_cache_lock_host: "redis://localhost:6379/3"
+login:
+  username_password:
+    lock_ttl: "5m"
+    retry_attempts: "3"
+session:
+  access_token_duration: "1h"
+  refresh_token_duration: "24h"
+  max_active: 1
+secret_key: "u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H"
