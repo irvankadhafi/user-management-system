@@ -8,10 +8,10 @@ CREATE TABLE IF NOT EXISTS "actions" (
 );
 
 CREATE TABLE IF NOT EXISTS "role_resource_actions" (
-                                                       "role" user_role NOT NULL,
-                                                       "resource" TEXT NOT NULL REFERENCES "resources"(id),
+    "role" user_role NOT NULL,
+    "resource" TEXT NOT NULL REFERENCES "resources"(id),
     "action" TEXT NOT NULL REFERENCES "actions"(id)
-    );
+);
 
 CREATE UNIQUE INDEX rra_unique_idx ON "role_resource_actions"("role", "resource", "action");
 

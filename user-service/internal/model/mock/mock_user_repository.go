@@ -7,10 +7,10 @@ package mock
 import (
 	context "context"
 	reflect "reflect"
+	time "time"
 	model "user-service/internal/model"
 
 	gomock "github.com/golang/mock/gomock"
-	uuid "github.com/satori/go.uuid"
 )
 
 // MockUserRepository is a mock of UserRepository interface.
@@ -37,7 +37,7 @@ func (m *MockUserRepository) EXPECT() *MockUserRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockUserRepository) Create(arg0 context.Context, arg1 uuid.UUID, arg2 *model.User) error {
+func (m *MockUserRepository) Create(arg0 context.Context, arg1 int64, arg2 *model.User) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
@@ -48,6 +48,21 @@ func (m *MockUserRepository) Create(arg0 context.Context, arg1 uuid.UUID, arg2 *
 func (mr *MockUserRepositoryMockRecorder) Create(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserRepository)(nil).Create), arg0, arg1, arg2)
+}
+
+// FindAll mocks base method.
+func (m *MockUserRepository) FindAll(arg0 context.Context, arg1 int, arg2 time.Time) ([]*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAll", arg0, arg1, arg2)
+	ret0, _ := ret[0].([]*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAll indicates an expected call of FindAll.
+func (mr *MockUserRepositoryMockRecorder) FindAll(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAll", reflect.TypeOf((*MockUserRepository)(nil).FindAll), arg0, arg1, arg2)
 }
 
 // FindByEmail mocks base method.
@@ -66,7 +81,7 @@ func (mr *MockUserRepositoryMockRecorder) FindByEmail(arg0, arg1 interface{}) *g
 }
 
 // FindByID mocks base method.
-func (m *MockUserRepository) FindByID(arg0 context.Context, arg1 uuid.UUID) (*model.User, error) {
+func (m *MockUserRepository) FindByID(arg0 context.Context, arg1 int64) (*model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByID", arg0, arg1)
 	ret0, _ := ret[0].(*model.User)
@@ -81,7 +96,7 @@ func (mr *MockUserRepositoryMockRecorder) FindByID(arg0, arg1 interface{}) *gomo
 }
 
 // FindPasswordByID mocks base method.
-func (m *MockUserRepository) FindPasswordByID(arg0 context.Context, arg1 uuid.UUID) ([]byte, error) {
+func (m *MockUserRepository) FindPasswordByID(arg0 context.Context, arg1 int64) ([]byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindPasswordByID", arg0, arg1)
 	ret0, _ := ret[0].([]byte)
@@ -125,7 +140,7 @@ func (mr *MockUserRepositoryMockRecorder) IsLoginByEmailPasswordLocked(arg0, arg
 }
 
 // Update mocks base method.
-func (m *MockUserRepository) Update(arg0 context.Context, arg1 uuid.UUID, arg2 *model.User) (*model.User, error) {
+func (m *MockUserRepository) Update(arg0 context.Context, arg1 int64, arg2 *model.User) (*model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*model.User)
@@ -140,7 +155,7 @@ func (mr *MockUserRepositoryMockRecorder) Update(arg0, arg1, arg2 interface{}) *
 }
 
 // UpdatePasswordByID mocks base method.
-func (m *MockUserRepository) UpdatePasswordByID(arg0 context.Context, arg1 uuid.UUID, arg2 string) error {
+func (m *MockUserRepository) UpdatePasswordByID(arg0 context.Context, arg1 int64, arg2 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePasswordByID", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)

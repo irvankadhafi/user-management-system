@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"errors"
-	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 	"time"
 	"user-service/internal/helper"
@@ -15,20 +14,20 @@ var ErrPasswordMismatch = errors.New("password mismatch")
 
 // User :nodoc:
 type User struct {
-	ID          uuid.UUID `json:"id" gorm:"primary_key"`
+	ID          int64     `json:"id" gorm:"primary_key"`
 	Name        string    `json:"name"`
 	Email       string    `json:"email"`
 	Password    string    `json:"password" gorm:"->:false;<-"` // gorm create & update only (disabled read from db)
 	Role        rbac.Role `json:"role"`
 	PhoneNumber string    `json:"phone_number"`
 
-	CreatedBy uuid.UUID      `json:"created_by" gorm:"->;<-:create"` // create & read only
-	UpdatedBy uuid.UUID      `json:"updated_by"`
+	CreatedBy int64          `json:"created_by" gorm:"->;<-:create"` // create & read only
+	UpdatedBy int64          `json:"updated_by"`
 	CreatedAt time.Time      `json:"created_at" gorm:"->;<-:create"` // create & read only
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 
-	SessionID uuid.UUID            `json:"session_id" gorm:"-"`
+	SessionID int64                `json:"session_id" gorm:"-"`
 	rolePerm  *rbac.RolePermission `gorm:"-"`
 }
 
@@ -36,19 +35,21 @@ type User struct {
 type Gender string
 
 type UserRepository interface {
-	Create(ctx context.Context, userID uuid.UUID, user *User) error
-	Update(ctx context.Context, userID uuid.UUID, user *User) (*User, error)
-	UpdatePasswordByID(ctx context.Context, userID uuid.UUID, password string) error
-	FindByID(ctx context.Context, id uuid.UUID) (*User, error)
+	Create(ctx context.Context, userID int64, user *User) error
+	Update(ctx context.Context, userID int64, user *User) (*User, error)
+	UpdatePasswordByID(ctx context.Context, userID int64, password string) error
+	FindByID(ctx context.Context, id int64) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
+	FindAll(ctx context.Context, query string, size, page int64) ([]int64, int64, error)
 
 	IsLoginByEmailPasswordLocked(ctx context.Context, email string) (bool, error)
 	IncrementLoginByEmailPasswordRetryAttempts(ctx context.Context, email string) error
-	FindPasswordByID(ctx context.Context, id uuid.UUID) ([]byte, error)
+	FindPasswordByID(ctx context.Context, id int64) ([]byte, error)
 }
 
 type UserUsecase interface {
-	FindByID(ctx context.Context, requester *User, id uuid.UUID) (*User, error)
+	FindByID(ctx context.Context, requester *User, id int64) (*User, error)
+	FindAll(ctx context.Context, requester *User, criteria UserSearchCriteria) ([]*User, int64, error)
 	Create(ctx context.Context, requester *User, input CreateUserInput) (*User, error)
 	ChangePassword(ctx context.Context, requester *User, input ChangePasswordInput) (*User, error)
 	UpdateProfile(ctx context.Context, requester *User, input UpdateProfileInput) (*User, error)
@@ -70,6 +71,12 @@ func (u *User) SetRolePermission(rolePerm *rbac.RolePermission) {
 // GetRolePermission get the role permission
 func (u *User) GetRolePermission() *rbac.RolePermission {
 	return u.rolePerm
+}
+
+type UserSearchCriteria struct {
+	Query string `json:"query"`
+	Page  int64  `json:"page"`
+	Size  int64  `json:"size"`
 }
 
 type CreateUserInput struct {
@@ -95,6 +102,7 @@ func (c *CreateUserInput) ValidateAndFormat() error {
 }
 
 type UpdateProfileInput struct {
+	ID          int64  `json:"id" validate:"required"`
 	Name        string `json:"name" validate:"required"`
 	PhoneNumber string `json:"phone_number" validate:"required,phonenumber"`
 }

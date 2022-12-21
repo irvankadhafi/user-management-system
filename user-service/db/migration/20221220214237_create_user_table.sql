@@ -6,14 +6,14 @@ CREATE TYPE "user_role" AS ENUM (
 
 
 CREATE TABLE IF NOT EXISTS "users" (
-    "id" uuid PRIMARY KEY,
+    "id" bigint PRIMARY KEY,
     "name" text,
     "email" text,
     "password" text,
     "role" user_role,
     "phone_number" text,
-    "created_by" uuid,
-    "updated_by" uuid,
+    "created_by" bigint,
+    "updated_by" bigint,
     "created_at" timestamp NOT NULL DEFAULT 'now()',
     "updated_at" timestamp NOT NULL DEFAULT 'now()',
     "deleted_at" timestamp

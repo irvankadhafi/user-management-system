@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/agiledragon/gomonkey/v2"
-	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"
@@ -32,12 +31,12 @@ func TestUserRepository_Create(t *testing.T) {
 	}
 
 	user := &model.User{
-		ID:          uuid.NewV4(),
+		ID:          utils.GenerateID(),
 		Email:       "test@irvan.com",
 		Role:        rbac.RoleMember,
 		PhoneNumber: "0819992299",
 	}
-	userRequesterID := uuid.NewV4()
+	userRequesterID := utils.GenerateID()
 
 	t.Run("ok", func(t *testing.T) {
 		rows := sqlmock.NewRows([]string{
@@ -80,7 +79,7 @@ func TestUserRepository_FindByID(t *testing.T) {
 	}
 	ctx := context.TODO()
 
-	userID := uuid.NewV4()
+	userID := utils.GenerateID()
 
 	t.Run("ok - retrieve from db", func(t *testing.T) {
 		defer kit.miniredis.FlushDB()
@@ -139,7 +138,7 @@ func TestUserRepository_FindByEEmail(t *testing.T) {
 	}
 
 	var (
-		userID    = uuid.NewV4()
+		userID    = utils.GenerateID()
 		userEmail = "test@irvan.com"
 		ctx       = context.TODO()
 	)
@@ -153,7 +152,7 @@ func TestUserRepository_FindByEEmail(t *testing.T) {
 		defer kit.miniredis.FlushDB()
 		mock.ExpectQuery("^SELECT .+ FROM \"users\"").WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(user.ID))
 
-		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id uuid.UUID) (*model.User, error) {
+		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id int64) (*model.User, error) {
 			return &user, nil
 		})
 		defer findByIDPatch.Reset()
@@ -167,10 +166,10 @@ func TestUserRepository_FindByEEmail(t *testing.T) {
 	t.Run("ok - retrieve from cache", func(t *testing.T) {
 		defer kit.miniredis.FlushDB()
 		cacheKey := repo.newCacheKeyByEmail(userEmail)
-		err := kit.miniredis.Set(cacheKey, userID.String())
+		err := kit.miniredis.Set(cacheKey, utils.Int64ToString(userID))
 		require.NoError(t, err)
 
-		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id uuid.UUID) (*model.User, error) {
+		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id int64) (*model.User, error) {
 			return &user, nil
 		})
 		defer findByIDPatch.Reset()
@@ -216,17 +215,17 @@ func TestUserRepository_Update(t *testing.T) {
 		cacheManager: kit.cacheManager,
 	}
 
-	userRequesterID := uuid.NewV4()
+	userRequesterID := utils.GenerateID()
 
 	user := &model.User{
-		ID:       uuid.NewV4(),
+		ID:       utils.GenerateID(),
 		Name:     "John Doe",
 		Email:    "john@doe.com",
 		Role:     rbac.RoleMember,
 		Password: "hahahihi",
 	}
 
-	patch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(_ *userRepository, _ context.Context, _ uuid.UUID) (*model.User, error) {
+	patch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(_ *userRepository, _ context.Context, _ int64) (*model.User, error) {
 		return user, nil
 	})
 	defer patch.Reset()
@@ -336,7 +335,7 @@ func TestUserRepository_FindPasswordByID(t *testing.T) {
 	password := "password"
 
 	user := model.User{
-		ID:       uuid.NewV4(),
+		ID:       utils.GenerateID(),
 		Email:    "test@email.com",
 		Password: password,
 	}
@@ -344,7 +343,7 @@ func TestUserRepository_FindPasswordByID(t *testing.T) {
 	t.Run("ok - retrieve from db", func(t *testing.T) {
 		mock.ExpectQuery("^SELECT .+ FROM \"users\"").WillReturnRows(sqlmock.NewRows([]string{"password"}).AddRow("wowPassword"))
 
-		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id uuid.UUID) (*model.User, error) {
+		findByIDPatch := gomonkey.ApplyMethod(reflect.TypeOf(repo), "FindByID", func(repo *userRepository, ctx context.Context, id int64) (*model.User, error) {
 			return &user, nil
 		})
 		defer findByIDPatch.Reset()
@@ -392,7 +391,7 @@ func TestUserRepository_UpdatePasswordByID(t *testing.T) {
 	ctx := context.TODO()
 
 	var (
-		userID   = uuid.NewV4()
+		userID   = utils.GenerateID()
 		password = "iniPaswordH3h3h"
 	)
 

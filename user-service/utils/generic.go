@@ -14,3 +14,13 @@ func InterfaceBytesToType[T any](i any) (out T) {
 	_ = json.Unmarshal(bt, &out)
 	return
 }
+
+// Contains tells whether slice A contains x.
+func Contains[T comparable](a []T, x T) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}

@@ -1,0 +1,1350 @@
+{
+	"info": {
+		"_postman_id": "d1ea77ec-c419-41c4-b60f-1cc92955a17a",
+		"name": "UserManagementSystem-UseDeall",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10454328"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "johndoe@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "irvankadhafi@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/api/auth/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:37:55 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "550"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIyLTEyLTIyVDAyOjM3OjU1Ljg5MTgyOTg2OSswNzowMCIsInVzZXJJRCI6MTY3MTY0MDMzMzA1NzM3NTcwMn0.oKoglG_oF_tLb8wplDf5emYsu0Msl946LPpj58eo6GE\",\n    \"access_token_expires_at\": \"2022-12-22T02:37:55.891829869+07:00\",\n    \"token_type\": \"Bearer\",\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIyLTEyLTIzVDAxOjM3OjU1Ljg5MTgyOTg2OSswNzowMCIsInVzZXJJRCI6MTY3MTY0MDMzMzA1NzM3NTcwMn0.sxLYJZ5K_7yKz6_03LNsRM7Y-b31ZR0_-u2fIiy7rYE\",\n    \"refresh_token_expires_at\": \"2022-12-23T01:37:55.891829869+07:00\"\n}"
+						},
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "irvankadhafii@mail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/api/auth/login",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:40:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"email or password not match\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Current Login User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/auth/me",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Current Login User Admin Info",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/auth/me",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:38:59 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "217"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671640333057375702\",\n    \"name\": \"Irvan KDHFXXX\",\n    \"email\": \"irvankadhafi@mail.com\",\n    \"role\": \"ADMIN\",\n    \"phone_number\": \"+6281927145985\",\n    \"created_at\": \"2022-12-21T23:32:13.059522Z\",\n    \"updated_at\": \"2022-12-22T01:30:56.517911Z\"\n}"
+						},
+						{
+							"name": "Get Current Login User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/auth/me",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:40:23 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "206"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671640333145004939\",\n    \"name\": \"John Doe\",\n    \"email\": \"johndoe@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"081927145985\",\n    \"created_at\": \"2022-12-21T23:32:13.146713Z\",\n    \"updated_at\": \"2022-12-21T23:32:13.146713Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/auth/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/auth/logout",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:40:40 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\":\"{{refresh_token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/auth/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Refresh Token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refresh_token\":\"{{refresh_token}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/auth/refresh",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:39:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "534"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIyLTEyLTIyVDAyOjM5OjQwLjAyNzg4MTI1MSswNzowMCIsInVzZXJJRCI6MTY3MTY0MDMzMzA1NzM3NTcwMn0.RRhV1fY1-xwFCyfsbBfSn5E_SY-wNLU7AW2kFJ4vE04\",\n    \"access_token_expires_at\": \"2022-12-22T02:39:40.027881Z\",\n    \"token_type\": \"Bearer\",\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIyLTEyLTIzVDAxOjM5OjQwLjAyNzg4MTI1MSswNzowMCIsInVzZXJJRCI6MTY3MTY0MDMzMzA1NzM3NTcwMn0.C7fyZnnuq_Mk-RccLe291m-4IZE_e811O5FOZMJkVWk\",\n    \"refresh_token_expires_at\": \"2022-12-23T01:39:40.027881Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf4@mail.com\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"45985\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/user",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create User with Admin Account",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf3@mail.com\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:41:52 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "292"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671648112813390841\",\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf3@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"+6281927145985\",\n    \"created_by\": \"1671640333057375702\",\n    \"updated_by\": \"1671640333057375702\",\n    \"created_at\": \"2022-12-22T01:41:52.81528984+07:00\",\n    \"updated_at\": \"2022-12-22T01:41:52.81528984+07:00\"\n}"
+						},
+						{
+							"name": "Error email already exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf3@mail.com\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:42:18 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"email already exist \"\n}"
+						},
+						{
+							"name": "Error internal",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf4@mail.com\",\n    \"password\": \"irvan\",\n    \"password_confirmation\": \"irvan\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:42:36 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"internal system error\"\n}"
+						},
+						{
+							"name": "Permission denied with member account",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf5@mail.com\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"45985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:50:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/user/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1671648180307053086",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648180307053086"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:46:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "283"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671648180307053086\",\n    \"name\": \"Irvan KDHFXXX11\",\n    \"email\": \"kdhf4@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"+6281927145985\",\n    \"created_by\": \"1671640333057375702\",\n    \"updated_by\": \"1671640333057375702\",\n    \"created_at\": \"2022-12-22T01:43:00.308789Z\",\n    \"updated_at\": \"2022-12-22T01:46:08.526328Z\"\n}"
+						},
+						{
+							"name": "Error",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"5\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1671648180307053086",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648180307053086"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:46:30 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"internal system error\"\n}"
+						},
+						{
+							"name": "User not Found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:47:58 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"record not found\"\n}"
+						},
+						{
+							"name": "Permission denied with member account",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:51:04 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"permission denied\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Find By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/user/1671640333057375702",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"1671640333057375702"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Find Admin by Admin",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user/1671640333057375702",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671640333057375702"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:48:25 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "218"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671640333057375702\",\n    \"name\": \"Irvan KDHFXXX11\",\n    \"email\": \"irvankadhafi@mail.com\",\n    \"role\": \"ADMIN\",\n    \"phone_number\": \"+6281927145985\",\n    \"created_at\": \"2022-12-21T23:32:13.059522Z\",\n    \"updated_at\": \"2022-12-22T01:45:14.19727Z\"\n}"
+						},
+						{
+							"name": "Find Member by Admin",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user/1671648530803553354",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648530803553354"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:48:58 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "202"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671648530803553354\",\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf5@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"+6245985\",\n    \"created_at\": \"2022-12-22T01:48:50.805576Z\",\n    \"updated_at\": \"2022-12-22T01:48:50.805576Z\"\n}"
+						},
+						{
+							"name": "Permission denied, member find other user",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user/1671648530803553354",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648530803553354"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:51:28 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"permission denied\"\n}"
+						},
+						{
+							"name": "success, member find their account",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user/1671640333145004939",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671640333145004939"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:51:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "206"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671640333145004939\",\n    \"name\": \"John Doe\",\n    \"email\": \"johndoe@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"081927145985\",\n    \"created_at\": \"2022-12-21T23:32:13.146713Z\",\n    \"updated_at\": \"2022-12-21T23:32:13.146713Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Find All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/user?size=5&page=1&query",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "query",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Find All by Admin",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user?size=5&page=1&query=irvan",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "query",
+											"value": "irvan"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:49:42 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1161"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"edges\": [\n        {\n            \"id\": \"1671640333057375702\",\n            \"name\": \"Irvan KDHFXXX11\",\n            \"email\": \"irvankadhafi@mail.com\",\n            \"role\": \"ADMIN\",\n            \"phone_number\": \"+6281927145985\",\n            \"created_at\": \"2022-12-21T23:32:13.059522Z\",\n            \"updated_at\": \"2022-12-22T01:45:14.19727Z\"\n        },\n        {\n            \"id\": \"1671647260868348731\",\n            \"name\": \"Irvan KDHF\",\n            \"email\": \"kdhf@mail.com\",\n            \"role\": \"MEMBER\",\n            \"phone_number\": \"+6281927145985\",\n            \"created_at\": \"2022-12-22T01:27:40.870076Z\",\n            \"updated_at\": \"2022-12-22T01:27:40.870076Z\"\n        },\n        {\n            \"id\": \"1671647387232236081\",\n            \"name\": \"Irvan KDHF\",\n            \"email\": \"kdhf2@mail.com\",\n            \"role\": \"MEMBER\",\n            \"phone_number\": \"+6281927145985\",\n            \"created_at\": \"2022-12-22T01:29:47.233987Z\",\n            \"updated_at\": \"2022-12-22T01:29:47.233987Z\"\n        },\n        {\n            \"id\": \"1671648112813390841\",\n            \"name\": \"Irvan KDHF\",\n            \"email\": \"kdhf3@mail.com\",\n            \"role\": \"MEMBER\",\n            \"phone_number\": \"+6281927145985\",\n            \"created_at\": \"2022-12-22T01:41:52.815289Z\",\n            \"updated_at\": \"2022-12-22T01:41:52.815289Z\"\n        },\n        {\n            \"id\": \"1671648180307053086\",\n            \"name\": \"Irvan KDHFXXX11\",\n            \"email\": \"kdhf4@mail.com\",\n            \"role\": \"MEMBER\",\n            \"phone_number\": \"+6281927145985\",\n            \"created_at\": \"2022-12-22T01:43:00.308789Z\",\n            \"updated_at\": \"2022-12-22T01:46:08.526328Z\"\n        }\n    ],\n    \"cursor_info\": {\n        \"size\": 5,\n        \"count\": 11,\n        \"countPage\": 3,\n        \"hasMore\": true,\n        \"cursor\": \"1\",\n        \"nextCursor\": \"2\"\n    }\n}"
+						},
+						{
+							"name": "Find All",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/api/user?size=5&page=1&query=irvan",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "query",
+											"value": "irvan"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:54:13 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"permission denied\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

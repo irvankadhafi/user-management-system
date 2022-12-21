@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redsync/redsync/v4"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
@@ -27,7 +26,7 @@ func NewUserRepository(db *gorm.DB, cacheManager cacher.CacheManager) model.User
 	}
 }
 
-func (u *userRepository) Create(ctx context.Context, userID uuid.UUID, user *model.User) error {
+func (u *userRepository) Create(ctx context.Context, userID int64, user *model.User) error {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":    utils.DumpIncomingContext(ctx),
 		"userID": userID,
@@ -48,7 +47,7 @@ func (u *userRepository) Create(ctx context.Context, userID uuid.UUID, user *mod
 	return nil
 }
 
-func (u *userRepository) Update(ctx context.Context, userID uuid.UUID, user *model.User) (*model.User, error) {
+func (u *userRepository) Update(ctx context.Context, userID int64, user *model.User) (*model.User, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":    utils.DumpIncomingContext(ctx),
 		"userID": userID,
@@ -70,7 +69,7 @@ func (u *userRepository) Update(ctx context.Context, userID uuid.UUID, user *mod
 	return u.FindByID(ctx, user.ID)
 }
 
-func (u *userRepository) FindByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
+func (u *userRepository) FindByID(ctx context.Context, id int64) (*model.User, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx": utils.DumpIncomingContext(ctx),
 		"id":  id,
@@ -110,6 +109,47 @@ func (u *userRepository) FindByID(ctx context.Context, id uuid.UUID) (*model.Use
 	return user, nil
 }
 
+func (u *userRepository) FindAll(ctx context.Context, query string, size, page int64) ([]int64, int64, error) {
+	logger := logrus.WithFields(logrus.Fields{
+		"ctx":   utils.DumpIncomingContext(ctx),
+		"query": query,
+		"size":  size,
+		"page":  page,
+	})
+	var count int64
+	err := u.db.WithContext(ctx).Model(model.User{}).
+		Count(&count).
+		Error
+	if err != nil {
+		logger.Error(err)
+		return nil, 0, err
+	}
+
+	if count <= 0 {
+		return nil, 0, nil
+	}
+
+	var ids []int64
+	err = u.db.WithContext(ctx).
+		Model(model.User{}).
+		Scopes(
+			orderByCreatedAtAsc,
+			withNameLike(query),
+			withSize(size),
+			withOffset(utils.Offset(page, size)),
+		).
+		Pluck("id", &ids).Error
+	switch err {
+	case nil:
+		return ids, count, nil
+	case gorm.ErrRecordNotFound:
+		return nil, 0, nil
+	default:
+		logger.Error(err)
+		return nil, 0, err
+	}
+}
+
 func (u *userRepository) FindByEmail(ctx context.Context, email string) (*model.User, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":   utils.DumpIncomingContext(ctx),
@@ -130,7 +170,7 @@ func (u *userRepository) FindByEmail(ctx context.Context, email string) (*model.
 		}
 	}
 
-	var id string
+	var id int64
 	err := u.db.WithContext(ctx).Debug().Model(model.User{}).Select("id").Take(&id, "email = ?", email).Error
 	switch err {
 	case nil:
@@ -138,8 +178,7 @@ func (u *userRepository) FindByEmail(ctx context.Context, email string) (*model.
 		if err != nil {
 			logger.Error(err)
 		}
-		userID, _ := uuid.FromString(id)
-		return u.FindByID(ctx, userID)
+		return u.FindByID(ctx, id)
 	case gorm.ErrRecordNotFound:
 		storeNil(u.cacheManager, cacheKey)
 		return nil, nil
@@ -197,7 +236,7 @@ func (u *userRepository) IncrementLoginByEmailPasswordRetryAttempts(ctx context.
 	return nil
 }
 
-func (u *userRepository) FindPasswordByID(ctx context.Context, id uuid.UUID) ([]byte, error) {
+func (u *userRepository) FindPasswordByID(ctx context.Context, id int64) ([]byte, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx": utils.DumpIncomingContext(ctx),
 		"id":  id,
@@ -235,7 +274,7 @@ func (u *userRepository) FindPasswordByID(ctx context.Context, id uuid.UUID) ([]
 	}
 }
 
-func (u *userRepository) UpdatePasswordByID(ctx context.Context, userID uuid.UUID, password string) error {
+func (u *userRepository) UpdatePasswordByID(ctx context.Context, userID int64, password string) error {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":    utils.DumpIncomingContext(ctx),
 		"userID": userID,
@@ -273,12 +312,12 @@ func (u *userRepository) newCacheKeyByEmail(email string) string {
 	return fmt.Sprintf("cache:id:user_email:%s", email)
 }
 
-func (u *userRepository) newCacheKeyByID(id uuid.UUID) string {
-	return fmt.Sprintf("cache:object:user:id:%s", id.String())
+func (u *userRepository) newCacheKeyByID(id int64) string {
+	return fmt.Sprintf("cache:object:user:id:%d", id)
 }
 
-func (u *userRepository) newPasswordCacheKeyByID(id uuid.UUID) string {
-	return fmt.Sprintf("cache:password:id:%s", id.String())
+func (u *userRepository) newPasswordCacheKeyByID(id int64) string {
+	return fmt.Sprintf("cache:password:id:%d", id)
 }
 
 func (u *userRepository) newLoginByEmailPasswordAttemptsCacheKeyByEmail(email string) string {
@@ -304,7 +343,7 @@ func (u *userRepository) findFromCacheByKey(key string) (reply *model.User, mu *
 	return
 }
 
-func (u *userRepository) findIDFromCacheByKey(key string) (reply uuid.UUID, mu *redsync.Mutex, err error) {
+func (u *userRepository) findIDFromCacheByKey(key string) (reply int64, mu *redsync.Mutex, err error) {
 	var rep interface{}
 	rep, mu, err = u.cacheManager.GetOrLock(key)
 	if err != nil || rep == nil {
@@ -316,10 +355,7 @@ func (u *userRepository) findIDFromCacheByKey(key string) (reply uuid.UUID, mu *
 		return
 	}
 
-	reply, err = uuid.FromString(string(bt))
-	if err != nil {
-		return
-	}
+	reply = utils.StringToInt64(string(bt))
 	return
 }
 

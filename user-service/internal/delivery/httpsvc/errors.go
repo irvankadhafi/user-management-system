@@ -15,6 +15,7 @@ var (
 	ErrInternal                   = echo.NewHTTPError(http.StatusInternalServerError, "internal system error")
 	ErrUnauthenticated            = echo.NewHTTPError(http.StatusUnauthorized, "unauthenticated")
 	ErrNotFound                   = echo.NewHTTPError(http.StatusNotFound, "record not found")
+	ErrDuplicateEmail             = echo.NewHTTPError(http.StatusBadRequest, "email already exist ")
 )
 
 // httpValidationOrInternalErr return valdiation or internal error

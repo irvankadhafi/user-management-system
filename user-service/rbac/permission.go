@@ -1,6 +1,8 @@
 package rbac
 
-import "sync"
+import (
+	"sync"
+)
 
 var mutex = &sync.RWMutex{}
 
@@ -65,7 +67,6 @@ func (r *RolePermission) HasAccess(resource Resource, action Action) bool {
 	if r == nil {
 		return false
 	}
-
 	if r.resourceActionPair != nil {
 		mutex.RLock()
 		defer mutex.RUnlock()
@@ -81,6 +82,7 @@ func (r *RolePermission) HasAccess(resource Resource, action Action) bool {
 
 	mutex.RLock()
 	defer mutex.RUnlock()
+
 	return r.resourceActionPair[newResourceActionKey(resource, action)]
 }
 

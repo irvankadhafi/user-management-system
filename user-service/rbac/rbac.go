@@ -14,8 +14,7 @@ type Resource string
 
 // Resource constants
 const (
-	ResourceUser   Resource = "user"   // this resource is used for admin-specific usecases
-	ResourceMember Resource = "member" // this resource is used for 'space member' role specific usecases
+	ResourceUser Resource = "user"
 )
 
 // Action is an action
@@ -30,7 +29,7 @@ const (
 	ActionChangeRole Action = "change_role"
 )
 
-// TraversePermission traverse the built in permission
+// TraversePermission traverse the builtin permission
 func TraversePermission(cb func(role Role, rsc Resource, act Action)) {
 	for rra, roles := range _permissions {
 		for _, role := range roles {
@@ -46,12 +45,9 @@ type resourceAction struct {
 
 // describe the permission for the Role here
 var _permissions = map[resourceAction][]Role{
-	{ResourceUser, ActionViewAny}:   {RoleAdmin},
-	{ResourceUser, ActionEditAny}:   {RoleAdmin},
-	{ResourceUser, ActionDeleteAny}: {RoleAdmin},
-
-	{ResourceMember, ActionViewAny}:    {RoleAdmin, RoleMember},
-	{ResourceMember, ActionEditAny}:    {RoleAdmin},
-	{ResourceMember, ActionChangeRole}: {RoleAdmin},
-	{ResourceMember, ActionDeleteAny}:  {RoleAdmin},
+	{ResourceUser, ActionCreateAny}:  {RoleAdmin},
+	{ResourceUser, ActionViewAny}:    {RoleAdmin},
+	{ResourceUser, ActionEditAny}:    {RoleAdmin},
+	{ResourceUser, ActionDeleteAny}:  {RoleAdmin},
+	{ResourceUser, ActionChangeRole}: {RoleAdmin},
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
-	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"
 	"testing"
@@ -24,8 +23,8 @@ func TestSessionRepository_Create(t *testing.T) {
 		cacheManager: kit.cacheManager,
 	}
 	ctx := context.TODO()
-	sessionID := uuid.NewV4()
-	userID := uuid.NewV4()
+	sessionID := utils.GenerateID()
+	userID := utils.GenerateID()
 
 	t.Run("ok", func(t *testing.T) {
 		mock.ExpectBegin()
@@ -66,8 +65,8 @@ func TestSessionRepository_FindByToken(t *testing.T) {
 	}
 
 	var (
-		sessionID = uuid.NewV4()
-		userID    = uuid.NewV4()
+		sessionID = utils.GenerateID()
+		userID    = utils.GenerateID()
 		token     = "token"
 		ctx       = context.TODO()
 	)
@@ -168,8 +167,8 @@ func TestSessionRepository_FindByID(t *testing.T) {
 	}
 
 	var (
-		sessionID = uuid.NewV4()
-		userID    = uuid.NewV4()
+		sessionID = utils.GenerateID()
+		userID    = utils.GenerateID()
 	)
 
 	ctx := context.TODO()
@@ -263,7 +262,7 @@ func TestSessionRepository_CacheToken(t *testing.T) {
 	repo := sessionRepo{cacheManager: kit.cacheManager}
 
 	var (
-		sessionID = uuid.NewV4()
+		sessionID = utils.GenerateID()
 		token     = "token"
 		ctx       = context.TODO()
 	)
@@ -300,9 +299,9 @@ func TestSessionRepository_RefreshToken(t *testing.T) {
 	}
 
 	now := time.Now()
-	userID := uuid.NewV4()
+	userID := utils.GenerateID()
 	sess := &model.Session{
-		ID:                    uuid.NewV4(),
+		ID:                    utils.GenerateID(),
 		UserID:                userID,
 		AccessToken:           "at",
 		RefreshToken:          "rt",
@@ -367,8 +366,8 @@ func TestSessionRepo_Delete(t *testing.T) {
 		defer kit.miniredis.FlushDB()
 
 		sess := &model.Session{
-			ID:                    uuid.NewV4(),
-			UserID:                uuid.NewV4(),
+			ID:                    utils.GenerateID(),
+			UserID:                utils.GenerateID(),
 			AccessToken:           "at",
 			RefreshTokenExpiredAt: time.Now(),
 		}
@@ -393,8 +392,8 @@ func TestSessionRepo_Delete(t *testing.T) {
 		defer kit.miniredis.FlushDB()
 
 		sess := &model.Session{
-			ID:                    uuid.NewV4(),
-			UserID:                uuid.NewV4(),
+			ID:                    utils.GenerateID(),
+			UserID:                utils.GenerateID(),
 			AccessToken:           "at",
 			RefreshTokenExpiredAt: time.Now(),
 		}

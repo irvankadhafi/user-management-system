@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"context"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
+	"sync"
 	"user-service/internal/helper"
 	"user-service/internal/model"
 	"user-service/rbac"
@@ -21,7 +21,7 @@ func NewUserUsecase(userRepo model.UserRepository) model.UserUsecase {
 	}
 }
 
-func (u *userUsecase) FindByID(ctx context.Context, requester *model.User, id uuid.UUID) (*model.User, error) {
+func (u *userUsecase) FindByID(ctx context.Context, requester *model.User, id int64) (*model.User, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":       utils.Dump(ctx),
 		"requester": utils.Dump(requester),
@@ -46,6 +46,61 @@ func (u *userUsecase) FindByID(ctx context.Context, requester *model.User, id uu
 	return user, nil
 }
 
+func (u *userUsecase) FindAll(ctx context.Context, requester *model.User, criteria model.UserSearchCriteria) ([]*model.User, int64, error) {
+	logger := logrus.WithFields(logrus.Fields{
+		"ctx":       utils.Dump(ctx),
+		"requester": utils.Dump(requester),
+	})
+
+	if !requester.HasAccess(rbac.ResourceUser, rbac.ActionViewAny) {
+		return nil, 0, ErrPermissionDenied
+	}
+
+	userIDs, count, err := u.userRepo.FindAll(ctx, criteria.Query, criteria.Size, criteria.Page)
+	if err != nil {
+		logger.Error(err)
+		return nil, 0, err
+	}
+	if len(userIDs) <= 0 || count <= 0 {
+		return nil, 0, err
+	}
+
+	var wg sync.WaitGroup
+	c := make(chan *model.User, len(userIDs))
+	for _, id := range userIDs {
+		wg.Add(1)
+		go func(id int64) {
+			defer wg.Done()
+
+			user, err := u.FindByID(ctx, requester, id)
+			if err != nil { // Ignore error
+				return
+			}
+			c <- user
+		}(id)
+	}
+	wg.Wait()
+	close(c)
+
+	// Put 'em in a buffer
+	rs := map[int64]*model.User{}
+	for s := range c {
+		if s != nil {
+			rs[s.ID] = s
+		}
+	}
+
+	var users []*model.User
+	// Sort 'em out
+	for _, id := range userIDs {
+		if user, ok := rs[id]; ok {
+			users = append(users, user)
+		}
+	}
+
+	return users, count, nil
+}
+
 func (u *userUsecase) Create(ctx context.Context, requester *model.User, input model.CreateUserInput) (*model.User, error) {
 	if !requester.HasAccess(rbac.ResourceUser, rbac.ActionCreateAny) {
 		return nil, ErrPermissionDenied
@@ -62,6 +117,17 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 		return nil, err
 	}
 
+	existingUser, err := u.userRepo.FindByEmail(ctx, input.Email)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	if existingUser != nil {
+		logger.Warn("email already exist")
+		return nil, ErrDuplicateEmail
+	}
+
 	cipherPwd, err := helper.HashString(input.Password)
 	if err != nil {
 		logger.Error(err)
@@ -69,7 +135,7 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 	}
 
 	user := &model.User{
-		ID:          uuid.NewV4(),
+		ID:          utils.GenerateID(),
 		Name:        input.Name,
 		Email:       input.Email,
 		Password:    cipherPwd,
@@ -141,8 +207,8 @@ func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, 
 	}
 
 	logger := logrus.WithFields(logrus.Fields{
-		"ctx":             utils.DumpIncomingContext(ctx),
-		"existingEpisode": utils.Dump(input),
+		"ctx":          utils.DumpIncomingContext(ctx),
+		"existingUser": utils.Dump(input),
 	})
 
 	if err := input.ValidateAndFormat(); err != nil {
@@ -150,20 +216,20 @@ func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, 
 		return nil, err
 	}
 
-	existingEpisode, err := u.userRepo.FindByID(ctx, requester.ID)
+	existingUser, err := u.userRepo.FindByID(ctx, input.ID)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
 	}
 
 	// obfuscate the cause of the error
-	if existingEpisode == nil {
+	if existingUser == nil {
 		return nil, ErrNotFound
 	}
 
-	existingEpisode.Name = input.Name
-	existingEpisode.PhoneNumber = input.Name
-	user, err := u.userRepo.Update(ctx, requester.ID, existingEpisode)
+	existingUser.Name = input.Name
+	existingUser.PhoneNumber = input.PhoneNumber
+	user, err := u.userRepo.Update(ctx, requester.ID, existingUser)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
@@ -172,7 +238,7 @@ func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, 
 	return user, nil
 }
 
-func (u *userUsecase) findByID(ctx context.Context, id uuid.UUID) (*model.User, error) {
+func (u *userUsecase) findByID(ctx context.Context, id int64) (*model.User, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx": utils.DumpIncomingContext(ctx),
 		"id":  id,

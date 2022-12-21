@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	uuid "github.com/satori/go.uuid"
 	"user-service/rbac"
 )
 
@@ -23,5 +22,5 @@ type AuthUsecase interface {
 	AuthenticateToken(ctx context.Context, accessToken string) (*User, error)
 	FindRolePermission(ctx context.Context, role rbac.Role) (*rbac.RolePermission, error)
 	RefreshToken(ctx context.Context, req RefreshTokenRequest) (*Session, error)
-	DeleteSessionByID(ctx context.Context, sessionID uuid.UUID) error
+	DeleteSessionByID(ctx context.Context, sessionID int64) error
 }

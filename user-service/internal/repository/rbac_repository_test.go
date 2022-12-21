@@ -27,7 +27,7 @@ func TestGroupRepository_CreateRoleResourceAction(t *testing.T) {
 
 	var (
 		role     = rbac.RoleAdmin
-		resource = rbac.ResourceMember
+		resource = rbac.ResourceUser
 		action   = rbac.ActionEditAny
 		ctx      = context.TODO()
 	)

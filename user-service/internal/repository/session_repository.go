@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redsync/redsync/v4"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
@@ -99,6 +98,7 @@ func (s *sessionRepo) FindByToken(ctx context.Context, tokenType model.TokenType
 		return nil, nil
 	}
 
+	sess.Role = user.Role
 	if err = s.cacheToken(sess); err != nil {
 		logger.Error(err)
 	}
@@ -106,7 +106,7 @@ func (s *sessionRepo) FindByToken(ctx context.Context, tokenType model.TokenType
 	return sess, nil
 }
 
-func (s *sessionRepo) FindByID(ctx context.Context, id uuid.UUID) (*model.Session, error) {
+func (s *sessionRepo) FindByID(ctx context.Context, id int64) (*model.Session, error) {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx": utils.DumpIncomingContext(ctx),
 		"id":  id,
@@ -144,7 +144,7 @@ func (s *sessionRepo) FindByID(ctx context.Context, id uuid.UUID) (*model.Sessio
 	if user == nil {
 		return nil, nil
 	}
-
+	sess.Role = user.Role
 	if err = s.cacheToken(&sess); err != nil {
 		logger.Error(err)
 	}
@@ -234,8 +234,8 @@ func (s *sessionRepo) deleteCaches(session *model.Session) error {
 	})
 }
 
-func (s *sessionRepo) newCacheKeyByID(id uuid.UUID) string {
-	return fmt.Sprintf("cache:object:session:id:%s", id.String())
+func (s *sessionRepo) newCacheKeyByID(id int64) string {
+	return fmt.Sprintf("cache:object:session:id:%d", id)
 }
 
 func (s *sessionRepo) findFromCacheByKey(key string) (reply *model.Session, mu *redsync.Mutex, err error) {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	jwt "github.com/dgrijalva/jwt-go"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"time"
 	"user-service/internal/config"
@@ -81,7 +80,7 @@ func (a *authUsecase) LoginByEmailPassword(ctx context.Context, req model.LoginR
 
 	now := time.Now()
 	session := &model.Session{
-		ID:                    uuid.NewV4(),
+		ID:                    utils.GenerateID(),
 		UserID:                user.ID,
 		AccessTokenExpiredAt:  now.Add(config.AccessTokenDuration()),
 		Role:                  user.Role,
@@ -218,7 +217,7 @@ func (a *authUsecase) RefreshToken(ctx context.Context, req model.RefreshTokenRe
 	return session, nil
 }
 
-func (a *authUsecase) DeleteSessionByID(ctx context.Context, sessionID uuid.UUID) error {
+func (a *authUsecase) DeleteSessionByID(ctx context.Context, sessionID int64) error {
 	logger := logrus.WithFields(logrus.Fields{
 		"ctx":       utils.DumpIncomingContext(ctx),
 		"sessionID": sessionID,
@@ -243,7 +242,7 @@ func (a *authUsecase) DeleteSessionByID(ctx context.Context, sessionID uuid.UUID
 }
 
 // generateToken and check uniqueness
-func generateToken(userID uuid.UUID, expTime time.Time) (string, error) {
+func generateToken(userID int64, expTime time.Time) (string, error) {
 	rawToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID": userID,
 		"exp":    expTime,

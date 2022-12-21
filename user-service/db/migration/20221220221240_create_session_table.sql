@@ -1,7 +1,7 @@
 -- +migrate Up notransaction
 CREATE TABLE IF NOT EXISTS "sessions" (
-    "id" uuid PRIMARY KEY,
-    "user_id" uuid,
+    "id" bigint PRIMARY KEY,
+    "user_id" bigint,
     "access_token" text NOT NULL,
     "refresh_token" text NOT NULL,
     "access_token_expired_at" timestamp NOT NULL,

@@ -3,15 +3,14 @@ package model
 import (
 	"context"
 	"fmt"
-	uuid "github.com/satori/go.uuid"
 	"time"
 	"user-service/rbac"
 )
 
 // Session the user's session
 type Session struct {
-	ID                    uuid.UUID `json:"id" gorm:"primary_key"`
-	UserID                uuid.UUID `json:"user_id"`
+	ID                    int64     `json:"id" gorm:"primary_key"`
+	UserID                int64     `json:"user_id"`
 	AccessToken           string    `json:"access_token"`
 	RefreshToken          string    `json:"refresh_token"`
 	AccessTokenExpiredAt  time.Time `json:"access_token_expired_at"`
@@ -35,7 +34,7 @@ const (
 type SessionRepository interface {
 	Create(ctx context.Context, sess *Session) error
 	FindByToken(ctx context.Context, tokenType TokenType, token string) (*Session, error)
-	FindByID(ctx context.Context, id uuid.UUID) (*Session, error)
+	FindByID(ctx context.Context, id int64) (*Session, error)
 	CheckToken(ctx context.Context, token string) (exist bool, err error)
 	RefreshToken(ctx context.Context, oldSess, sess *Session) (*Session, error)
 	Delete(ctx context.Context, session *Session) error

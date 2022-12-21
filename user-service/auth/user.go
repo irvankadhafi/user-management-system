@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	uuid "github.com/satori/go.uuid"
 	"user-service/internal/model"
 	"user-service/rbac"
 )
@@ -28,9 +27,9 @@ func GetUserFromCtx(ctx context.Context) *User {
 
 // User represent an authenticated user
 type User struct {
-	ID             uuid.UUID            `json:"id"`
+	ID             int64                `json:"id"`
 	Role           rbac.Role            `json:"role"`
-	SessionID      uuid.UUID            `json:"session_id"`
+	SessionID      int64                `json:"session_id"`
 	RolePermission *rbac.RolePermission `json:"-"`
 }
 

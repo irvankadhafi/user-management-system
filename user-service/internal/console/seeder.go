@@ -2,7 +2,6 @@ package console
 
 import (
 	"context"
-	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"time"
@@ -13,6 +12,7 @@ import (
 	"user-service/internal/model"
 	"user-service/internal/repository"
 	"user-service/rbac"
+	"user-service/utils"
 )
 
 var seedCmd = &cobra.Command{
@@ -59,7 +59,7 @@ func seeder(cmd *cobra.Command, args []string) {
 	if err != nil {
 		logrus.Error(err)
 	}
-	userAdminID := uuid.NewV4()
+	userAdminID := utils.GenerateID()
 	userAdmin := &model.User{
 		ID:          userAdminID,
 		Name:        "Irvan Kadhafi",
@@ -79,7 +79,7 @@ func seeder(cmd *cobra.Command, args []string) {
 		logrus.Error(err)
 	}
 	userMember := &model.User{
-		ID:          uuid.NewV4(),
+		ID:          utils.GenerateID(),
 		Name:        "John Doe",
 		Email:       "johndoe@mail.com",
 		Password:    userMemberCipherPwd,
