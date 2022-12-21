@@ -33,14 +33,14 @@ func (s *Service) handleUpdateUser() echo.HandlerFunc {
 			"requesterID": requester.ID,
 		})
 
-		req := model.UpdateProfileInput{}
+		req := model.UpdateUserInput{}
 		if err := c.Bind(&req); err != nil {
 			logrus.Error(err)
 			return ErrInvalidArgument
 		}
 
-		req.ID = utils.StringToInt64(c.Param("userID"))
-		user, err := s.userUsecase.UpdateProfile(ctx, requester, req)
+		userID := utils.StringToInt64(c.Param("userID"))
+		user, err := s.userUsecase.UpdateByID(ctx, requester, userID, req)
 		switch err {
 		case nil:
 			break
@@ -48,6 +48,46 @@ func (s *Service) handleUpdateUser() echo.HandlerFunc {
 			return ErrPermissionDenied
 		case usecase.ErrNotFound:
 			return ErrNotFound
+		default:
+			logger.Error(err)
+			return ErrInternal
+		}
+
+		res := userResponse{
+			ID:          utils.Int64ToString(user.ID),
+			Name:        user.Name,
+			Email:       user.Email,
+			Role:        user.Role,
+			PhoneNumber: user.PhoneNumber,
+			CreatedBy:   utils.Int64ToString(user.CreatedBy),
+			UpdatedBy:   utils.Int64ToString(user.UpdatedBy),
+			CreatedAt:   utils.FormatTimeRFC3339(&user.CreatedAt),
+			UpdatedAt:   utils.FormatTimeRFC3339(&user.UpdatedAt),
+		}
+		return c.JSON(http.StatusOK, res)
+	}
+}
+
+func (s *Service) handleDeleteUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := c.Request().Context()
+		requester := delivery.GetAuthUserFromCtx(ctx)
+		logger := logrus.WithFields(logrus.Fields{
+			"ctx":         utils.DumpIncomingContext(ctx),
+			"requesterID": requester.ID,
+		})
+
+		userID := utils.StringToInt64(c.Param("userID"))
+		user, err := s.userUsecase.DeleteByID(ctx, requester, userID)
+		switch err {
+		case nil:
+			break
+		case usecase.ErrPermissionDenied:
+			return ErrPermissionDenied
+		case usecase.ErrNotFound:
+			return ErrNotFound
+		case usecase.ErrFailedPrecondition:
+			return ErrFailedPrecondition
 		default:
 			logger.Error(err)
 			return ErrInternal

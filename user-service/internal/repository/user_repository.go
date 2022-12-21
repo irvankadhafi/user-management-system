@@ -35,7 +35,7 @@ func (u *userRepository) Create(ctx context.Context, userID int64, user *model.U
 	user.CreatedBy = userID
 	user.UpdatedBy = userID
 
-	if err := u.db.WithContext(ctx).Debug().Create(user).Error; err != nil {
+	if err := u.db.WithContext(ctx).Create(user).Error; err != nil {
 		logger.Error(err)
 		return err
 	}
@@ -57,7 +57,7 @@ func (u *userRepository) Update(ctx context.Context, userID int64, user *model.U
 	user.UpdatedAt = time.Now()
 	user.UpdatedBy = userID
 
-	if err := u.db.WithContext(ctx).Debug().Updates(user).Error; err != nil {
+	if err := u.db.WithContext(ctx).Updates(user).Error; err != nil {
 		logger.Error(err)
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (u *userRepository) FindByID(ctx context.Context, id int64) (*model.User, e
 	}
 
 	user := &model.User{}
-	err := u.db.WithContext(ctx).Debug().Take(user, "id = ?", id).Error
+	err := u.db.WithContext(ctx).Take(user, "id = ?", id).Error
 	switch err {
 	case nil:
 	case gorm.ErrRecordNotFound:
@@ -171,7 +171,7 @@ func (u *userRepository) FindByEmail(ctx context.Context, email string) (*model.
 	}
 
 	var id int64
-	err := u.db.WithContext(ctx).Debug().Model(model.User{}).Select("id").Take(&id, "email = ?", email).Error
+	err := u.db.WithContext(ctx).Model(model.User{}).Select("id").Take(&id, "email = ?", email).Error
 	switch err {
 	case nil:
 		err := u.cacheManager.StoreWithoutBlocking(cacher.NewItem(cacheKey, id))
@@ -257,7 +257,7 @@ func (u *userRepository) FindPasswordByID(ctx context.Context, id int64) ([]byte
 	}
 
 	var pass string
-	err := u.db.WithContext(ctx).Debug().Model(model.User{}).Select("password").Take(&pass, "id = ?", id).Error
+	err := u.db.WithContext(ctx).Model(model.User{}).Select("password").Take(&pass, "id = ?", id).Error
 	switch err {
 	case nil:
 		err := u.cacheManager.StoreWithoutBlocking(cacher.NewItem(cacheKey, pass))
@@ -298,6 +298,25 @@ func (u *userRepository) UpdatePasswordByID(ctx context.Context, userID int64, p
 	}
 
 	return nil
+}
+
+func (u *userRepository) DeleteByID(ctx context.Context, userID, id int64) (*model.User, error) {
+	logger := logrus.WithFields(logrus.Fields{
+		"ctx":    utils.DumpIncomingContext(ctx),
+		"userID": userID,
+		"id":     id,
+	})
+	user := &model.User{ID: id}
+	if err := u.db.WithContext(ctx).Delete(user).Error; err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	if err := u.cacheManager.DeleteByKeys([]string{u.newCacheKeyByID(id)}); err != nil {
+		logger.Error(err)
+	}
+
+	return user, nil
 }
 
 func (u *userRepository) deleteCache(user *model.User) error {

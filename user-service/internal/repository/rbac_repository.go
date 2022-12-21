@@ -128,6 +128,7 @@ func (r *rbacRepository) createAction(ctx context.Context, act rbac.Action) erro
 }
 
 func (r *rbacRepository) findAllRoleResourceAction(ctx context.Context) (rra []model.RoleResourceAction, err error) {
-	err = r.db.WithContext(ctx).Debug().Find(&rra).Error
+	err = r.db.WithContext(ctx).
+	Find(&rra).Error
 	return rra, err
 }

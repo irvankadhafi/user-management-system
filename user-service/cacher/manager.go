@@ -29,9 +29,7 @@ type (
 		StoreNil(cacheKey string) error
 		IncreaseCachedValueByOne(key string) error
 		Expire(string, time.Duration) error
-
 		GetTTL(string) (int64, error)
-
 		AcquireLock(string) (*redsync.Mutex, error)
 		SetDefaultTTL(time.Duration)
 		SetNilTTL(time.Duration)

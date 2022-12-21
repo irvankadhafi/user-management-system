@@ -39,7 +39,7 @@ func (s *sessionRepo) Create(ctx context.Context, sess *model.Session) error {
 		"userID": sess.UserID,
 	})
 
-	if err := s.db.WithContext(ctx).Debug().Create(sess).Error; err != nil {
+	if err := s.db.WithContext(ctx).Create(sess).Error; err != nil {
 		logger.Error(err)
 		return err
 	}

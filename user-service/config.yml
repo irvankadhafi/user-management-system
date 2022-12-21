@@ -29,5 +29,4 @@ login:
 session:
   access_token_duration: "1h"
   refresh_token_duration: "24h"
-  max_active: 1
 secret_key: "u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H"

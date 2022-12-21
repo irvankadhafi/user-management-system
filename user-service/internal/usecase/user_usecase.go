@@ -201,7 +201,7 @@ func (u *userUsecase) ChangePassword(ctx context.Context, requester *model.User,
 	return user, nil
 }
 
-func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, input model.UpdateProfileInput) (*model.User, error) {
+func (u *userUsecase) UpdateByID(ctx context.Context, requester *model.User, id int64, input model.UpdateUserInput) (*model.User, error) {
 	if !requester.HasAccess(rbac.ResourceUser, rbac.ActionEditAny) {
 		return nil, ErrPermissionDenied
 	}
@@ -216,7 +216,7 @@ func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, 
 		return nil, err
 	}
 
-	existingUser, err := u.userRepo.FindByID(ctx, input.ID)
+	existingUser, err := u.userRepo.FindByID(ctx, id)
 	if err != nil {
 		logger.Error(err)
 		return nil, err
@@ -234,6 +234,38 @@ func (u *userUsecase) UpdateProfile(ctx context.Context, requester *model.User, 
 		logger.Error(err)
 		return nil, err
 	}
+
+	return user, nil
+}
+
+func (u *userUsecase) DeleteByID(ctx context.Context, requester *model.User, id int64) (*model.User, error) {
+	if !requester.HasAccess(rbac.ResourceUser, rbac.ActionDeleteAny) {
+		return nil, ErrPermissionDenied
+	}
+
+	if requester.ID == id {
+		return nil, ErrFailedPrecondition
+	}
+
+	logger := logrus.WithFields(logrus.Fields{
+		"ctx":       utils.DumpIncomingContext(ctx),
+		"requester": utils.Dump(requester),
+		"id":        id,
+	})
+
+	user, err := u.FindByID(ctx, requester, id)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	deletedUser, err := u.userRepo.DeleteByID(ctx, requester.ID, id)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	user.DeletedAt = deletedUser.DeletedAt
 
 	return user, nil
 }

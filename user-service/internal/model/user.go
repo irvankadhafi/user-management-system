@@ -37,6 +37,7 @@ type Gender string
 type UserRepository interface {
 	Create(ctx context.Context, userID int64, user *User) error
 	Update(ctx context.Context, userID int64, user *User) (*User, error)
+	DeleteByID(ctx context.Context, userID, id int64) (*User, error)
 	UpdatePasswordByID(ctx context.Context, userID int64, password string) error
 	FindByID(ctx context.Context, id int64) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
@@ -52,7 +53,8 @@ type UserUsecase interface {
 	FindAll(ctx context.Context, requester *User, criteria UserSearchCriteria) ([]*User, int64, error)
 	Create(ctx context.Context, requester *User, input CreateUserInput) (*User, error)
 	ChangePassword(ctx context.Context, requester *User, input ChangePasswordInput) (*User, error)
-	UpdateProfile(ctx context.Context, requester *User, input UpdateProfileInput) (*User, error)
+	UpdateByID(ctx context.Context, requester *User, id int64, input UpdateUserInput) (*User, error)
+	DeleteByID(ctx context.Context, requester *User, id int64) (*User, error)
 }
 
 // SetPermission set permission to user
@@ -101,13 +103,12 @@ func (c *CreateUserInput) ValidateAndFormat() error {
 	return nil
 }
 
-type UpdateProfileInput struct {
-	ID          int64  `json:"id" validate:"required"`
+type UpdateUserInput struct {
 	Name        string `json:"name" validate:"required"`
 	PhoneNumber string `json:"phone_number" validate:"required,phonenumber"`
 }
 
-func (u *UpdateProfileInput) ValidateAndFormat() error {
+func (u *UpdateUserInput) ValidateAndFormat() error {
 	_ = helper.RemoveLeadingZeroPhoneNumber(&u.PhoneNumber)
 	if err := validate.Struct(u); err != nil {
 		return err

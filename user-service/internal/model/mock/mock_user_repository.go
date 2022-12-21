@@ -142,7 +142,7 @@ func (mr *MockUserRepositoryMockRecorder) IsLoginByEmailPasswordLocked(arg0, arg
 // Update mocks base method.
 func (m *MockUserRepository) Update(arg0 context.Context, arg1 int64, arg2 *model.User) (*model.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "UpdateByID", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*model.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -151,7 +151,7 @@ func (m *MockUserRepository) Update(arg0 context.Context, arg1 int64, arg2 *mode
 // Update indicates an expected call of Update.
 func (mr *MockUserRepositoryMockRecorder) Update(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserRepository)(nil).Update), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByID", reflect.TypeOf((*MockUserRepository)(nil).Update), arg0, arg1, arg2)
 }
 
 // UpdatePasswordByID mocks base method.
