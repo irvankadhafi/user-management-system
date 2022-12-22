@@ -2,6 +2,7 @@ version: '3.8'
 
 volumes:
   postgres_db: {}
+  redis_db: {}
 
 networks:
   bridge:
@@ -20,14 +21,13 @@ services:
       - bridge
     ports:
       - "25432:5432"
-
-#services:
-#  mongodb:
-#    image: mongo:6.0
-#    volumes:
-#      - mongodb_data:/data/db
-#    ports:
-#      - "27017:27017"
-#
-#volumes:
-#  mongodb_data:
+  redis:
+    image: redis:5.0
+    networks:
+      - bridge
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "16379:6379"
+    volumes:
+      - "redis_db:/data"

@@ -8,9 +8,35 @@ The system follows the clean architecture principles, with a separation of conce
   <img src="./diagram.png" />
 </p>
 
-### API Documentation
+## Steps
+1. Clone the repository: `git clone git@github.com:irvankadhafi/user-management-system.git`
+2. Run `docker-compose up`
+3. Migrate database: `cd user-service && go run . migrate`
+4. Seed user data `cd user-service && go run . seeder`
+5. Seed rbac `cd user-service && go run . go run . migrate-rbac-permission`
+6. Run server `make run`
+
+## TODO
+- Implement all unit tests
+- Decomposing rbac mechanism to new service named auth-service
+- Using MongoDB as database
+- Create kubernetes deployment config
+
+## API Documentation
 
 https://www.postman.com/irvankadhafi/workspace/irvankadhafi-deall/collection/10454328-d1ea77ec-c419-41c4-b60f-1cc92955a17a?ctx=documentation
+
+## User Login Credential (After seed)
+- Admin:
+    ```
+    email: irvankadhafi@mail.com
+    password: 123456 
+    ```
+- Member
+     ```
+    email: johndoe@mail.com
+    password: 123456 
+    ```
 
 
 ## Technology
