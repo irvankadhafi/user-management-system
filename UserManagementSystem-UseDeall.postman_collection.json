@@ -19,12 +19,12 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "johndoe@mail.com",
+									"value": "irvankadhafi@mail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "irvan123",
+									"value": "123456",
 									"type": "text"
 								}
 							]
@@ -724,7 +724,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+							"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"role\": \"ADMIN\",\n    \"phone_number\": \"081927145985\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -732,7 +732,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/user/1",
+							"raw": "localhost:3000/api/user/1671640333145004939",
 							"host": [
 								"localhost"
 							],
@@ -740,7 +740,7 @@
 							"path": [
 								"api",
 								"user",
-								"1"
+								"1671640333145004939"
 							]
 						}
 					},
