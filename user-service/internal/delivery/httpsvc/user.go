@@ -48,6 +48,8 @@ func (s *Service) handleUpdateUser() echo.HandlerFunc {
 			return ErrPermissionDenied
 		case usecase.ErrNotFound:
 			return ErrNotFound
+		case usecase.ErrRoleNotFound:
+			return ErrRoleNotFound
 		default:
 			logger.Error(err)
 			return ErrInternal

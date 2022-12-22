@@ -112,7 +112,7 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 		"input":     utils.Dump(input),
 	})
 
-	if validRole := rbac.ValidateRole(rbac.Role(input.Role)); !validRole {
+	if validRole := rbac.ValidateRole(input.Role); !validRole {
 		return nil, ErrRoleNotFound
 	}
 
@@ -143,7 +143,7 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 		Name:        input.Name,
 		Email:       input.Email,
 		Password:    cipherPwd,
-		Role:        rbac.Role(input.Role),
+		Role:        input.Role,
 		PhoneNumber: input.PhoneNumber,
 	}
 
@@ -219,6 +219,10 @@ func (u *userUsecase) UpdateByID(ctx context.Context, requester *model.User, id 
 		"existingUser": utils.Dump(input),
 	})
 
+	if validRole := rbac.ValidateRole(input.Role); !validRole {
+		return nil, ErrRoleNotFound
+	}
+
 	if err := input.ValidateAndFormat(); err != nil {
 		logger.Error(err)
 		return nil, err
@@ -237,6 +241,7 @@ func (u *userUsecase) UpdateByID(ctx context.Context, requester *model.User, id 
 
 	existingUser.Name = input.Name
 	existingUser.PhoneNumber = input.PhoneNumber
+	existingUser.Role = input.Role
 	user, err := u.userRepo.Update(ctx, requester.ID, existingUser)
 	if err != nil {
 		logger.Error(err)

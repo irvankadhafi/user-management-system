@@ -82,12 +82,12 @@ type UserSearchCriteria struct {
 }
 
 type CreateUserInput struct {
-	Name                 string `json:"name" validate:"required"`
-	Email                string `json:"email" validate:"required,email"`
-	Role                 string `json:"role" validate:"required"`
-	Password             string `json:"password" validate:"required,min=6"`
-	PasswordConfirmation string `json:"password_confirmation" validate:"required,min=6,eqfield=Password"`
-	PhoneNumber          string `json:"phone_number" validate:"required,phonenumber"`
+	Name                 string    `json:"name" validate:"required"`
+	Email                string    `json:"email" validate:"required,email"`
+	Role                 rbac.Role `json:"role" validate:"required"`
+	Password             string    `json:"password" validate:"required,min=6"`
+	PasswordConfirmation string    `json:"password_confirmation" validate:"required,min=6,eqfield=Password"`
+	PhoneNumber          string    `json:"phone_number" validate:"required,phonenumber"`
 }
 
 // ValidateAndFormat validate and format the phone number
@@ -105,8 +105,9 @@ func (c *CreateUserInput) ValidateAndFormat() error {
 }
 
 type UpdateUserInput struct {
-	Name        string `json:"name" validate:"required"`
-	PhoneNumber string `json:"phone_number" validate:"required,phonenumber"`
+	Name        string    `json:"name" validate:"required"`
+	Role        rbac.Role `json:"role" validate:"required"`
+	PhoneNumber string    `json:"phone_number" validate:"required,phonenumber"`
 }
 
 func (u *UpdateUserInput) ValidateAndFormat() error {
