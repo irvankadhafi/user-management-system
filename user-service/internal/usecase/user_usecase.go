@@ -112,6 +112,10 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 		"input":     utils.Dump(input),
 	})
 
+	if validRole := rbac.ValidateRole(rbac.Role(input.Role)); !validRole {
+		return nil, ErrRoleNotFound
+	}
+
 	if err := input.ValidateAndFormat(); err != nil {
 		logger.Error(err)
 		return nil, err
@@ -139,7 +143,7 @@ func (u *userUsecase) Create(ctx context.Context, requester *model.User, input m
 		Name:        input.Name,
 		Email:       input.Email,
 		Password:    cipherPwd,
-		Role:        rbac.RoleMember,
+		Role:        rbac.Role(input.Role),
 		PhoneNumber: input.PhoneNumber,
 	}
 

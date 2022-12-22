@@ -9,6 +9,13 @@ const (
 	RoleAdmin  Role = "ADMIN"
 )
 
+func ValidateRole(input Role) bool {
+	if input == RoleMember || input == RoleAdmin {
+		return true
+	}
+	return false
+}
+
 // Resource is a resource
 type Resource string
 

@@ -166,6 +166,8 @@ func (s *Service) handleCreateUser() echo.HandlerFunc {
 			break
 		case usecase.ErrPermissionDenied:
 			return ErrPermissionDenied
+		case usecase.ErrRoleNotFound:
+			return ErrRoleNotFound
 		case usecase.ErrDuplicateEmail:
 			return ErrDuplicateEmail
 		default:

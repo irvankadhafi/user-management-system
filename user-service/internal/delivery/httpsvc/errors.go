@@ -17,7 +17,8 @@ var (
 	ErrNotFound                   = echo.NewHTTPError(http.StatusNotFound, "record not found")
 	ErrDuplicateEmail             = echo.NewHTTPError(http.StatusBadRequest, "email already exist ")
 	ErrFailedPrecondition         = echo.NewHTTPError(http.StatusBadRequest, "precondition failed ")
-	ErrPasswordMismatch           = echo.NewHTTPError(http.StatusBadRequest, "password mismatch ")
+	ErrPasswordMismatch           = echo.NewHTTPError(http.StatusBadRequest, "password mismatch")
+	ErrRoleNotFound               = echo.NewHTTPError(http.StatusBadRequest, "role not valid")
 )
 
 // httpValidationOrInternalErr return valdiation or internal error

@@ -84,6 +84,7 @@ type UserSearchCriteria struct {
 type CreateUserInput struct {
 	Name                 string `json:"name" validate:"required"`
 	Email                string `json:"email" validate:"required,email"`
+	Role                 string `json:"role" validate:"required"`
 	Password             string `json:"password" validate:"required,min=6"`
 	PasswordConfirmation string `json:"password_confirmation" validate:"required,min=6,eqfield=Password"`
 	PhoneNumber          string `json:"phone_number" validate:"required,phonenumber"`

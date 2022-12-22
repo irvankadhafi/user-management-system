@@ -4,6 +4,9 @@ This is the documentation for the User Management System API. You can use this A
 
 The system follows the clean architecture principles, with a separation of concerns between the different layers. https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
+<p align="center">
+  <img src="./diagram.png" />
+</p>
 
 ### API Documentation
 

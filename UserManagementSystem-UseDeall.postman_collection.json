@@ -24,7 +24,7 @@
 								},
 								{
 									"key": "password",
-									"value": "123456",
+									"value": "irvan123",
 									"type": "text"
 								}
 							]
@@ -469,7 +469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf4@mail.com\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"45985\"\n}",
+							"raw": "{\n    \"name\": \"Irvan KDHF\",\n    \"email\": \"kdhf11@mail.com\",\n    \"role\": \"ADMIN\",\n    \"password\": \"irvan123\",\n    \"password_confirmation\": \"irvan123\",\n    \"phone_number\": \"45985\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -968,6 +968,267 @@
 					]
 				},
 				{
+					"name": "Change User Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"old_password\": \"123456\",\n    \"new_password\": \"irvan123\",\n    \"new_password_confirmation\": \"irvan123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/user/1671640333145004939/password",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"1671640333145004939",
+								"password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1671648180307053086",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648180307053086"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:46:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "283"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"1671648180307053086\",\n    \"name\": \"Irvan KDHFXXX11\",\n    \"email\": \"kdhf4@mail.com\",\n    \"role\": \"MEMBER\",\n    \"phone_number\": \"+6281927145985\",\n    \"created_by\": \"1671640333057375702\",\n    \"updated_by\": \"1671640333057375702\",\n    \"created_at\": \"2022-12-22T01:43:00.308789Z\",\n    \"updated_at\": \"2022-12-22T01:46:08.526328Z\"\n}"
+						},
+						{
+							"name": "Error",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"5\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1671648180307053086",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1671648180307053086"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:46:30 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"internal system error\"\n}"
+						},
+						{
+							"name": "User not Found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:47:58 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"record not found\"\n}"
+						},
+						{
+							"name": "Permission denied with member account",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Irvan KDHFXXX11\",\n    \"phone_number\": \"081927145985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user/1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"1"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 21 Dec 2022 18:51:04 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"permission denied\"\n}"
+						}
+					]
+				},
+				{
 					"name": "Find By ID",
 					"request": {
 						"auth": {
@@ -983,7 +1244,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/user/1671640333057375702",
+							"raw": "localhost:3000/api/user/1671640552848691645",
 							"host": [
 								"localhost"
 							],
@@ -991,7 +1252,7 @@
 							"path": [
 								"api",
 								"user",
-								"1671640333057375702"
+								"1671640552848691645"
 							]
 						}
 					},
@@ -1360,7 +1621,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/user/1671640552848691645",
+							"raw": "localhost:3000/api/user/1671640875550405124",
 							"host": [
 								"localhost"
 							],
@@ -1368,7 +1629,7 @@
 							"path": [
 								"api",
 								"user",
-								"1671640552848691645"
+								"1671640875550405124"
 							]
 						}
 					},
